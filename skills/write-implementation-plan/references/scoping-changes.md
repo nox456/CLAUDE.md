@@ -1,8 +1,10 @@
 # Scoping the change list
 
-Buckets are named after **real directories in this repo**, not after generic layers. The list
-below is a prompt for what to look for in each kind of layer, plus the ripple changes that get
-forgotten. Cover the bucket, then check the "often missed" line before moving on.
+Buckets are named after **real directories in this repo**, not after generic layers. Not every
+repo has the layers below: a library, CLI, or single-service repo buckets by its own modules
+(`parser`, `runtime`, `transport`). Use these sections as a prompt for the kinds of change to
+hunt for, not as a structure to reproduce. Cover the bucket, then check its "often missed" line
+before moving on.
 
 ## Database / data layer
 
@@ -30,8 +32,8 @@ Types, validation schemas, enums and their labels, generated clients, SDK surfac
 utilities used by more than one app.
 
 **Often missed:** every consumer of a changed type — grep, do not guess; the regeneration
-command for generated artifacts, named in the step that needs it; version bumps and peer
-ranges; keeping a label/display mapping in one place instead of copying it per app.
+command for generated artifacts, named in the step that needs it; version bumps and dependency
+ranges; keeping a label/display mapping in one place instead of copying it per consumer.
 
 ## Frontend
 
@@ -58,8 +60,8 @@ definitions, dashboards and alerts.
 
 **Often missed:** a new env var added to **every** environment plus the example file and the
 deploy config; the flag's default per environment and the ticket to remove it later; a new
-dependency's license and bundle-size cost; CI steps that must run for the new package;
-alerting on the new failure mode.
+dependency's real cost (license, install size, build time); CI steps that must run for the new
+module; alerting on the new failure mode.
 
 ## Tests
 

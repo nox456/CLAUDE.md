@@ -53,8 +53,9 @@ Default to the one-pager and grow it — cheaper than trimming a bloated full PR
 request clearly matches the right column, use the full template without asking.
 
 Then gather what already exists before asking the user for anything: the linked issue or
-ticket (`gh issue view <n>`), design links, prior PRDs in the repo, related ADRs. Read them.
-Do not re-ask for what a linked ticket already answers.
+ticket (`gh issue view <n>` where the tracker is GitHub, otherwise ask for it), design links,
+prior PRDs in the repo, related ADRs. Read them. Do not re-ask for what a linked ticket
+already answers.
 
 ### Step 2 — Interview
 

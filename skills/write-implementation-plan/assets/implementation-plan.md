@@ -29,38 +29,40 @@ references so the reader can check]
 signatures, event/job payloads, migration DDL. Concrete and minimal — this is what parallel
 work depends on, so it lands first.]
 
-```ts
-// packages/<pkg>/src/<file>.ts — NEW
+```
+<path/to/file> — NEW
+[the signature, schema, DDL, or payload shape exactly as it will exist]
 ```
 
 ## Scoped changes
 
-[One table per bucket. Delete buckets with no changes; never write an "N/A" row. Mark each
-artifact NEW / MODIFY / DELETE.]
+[Rename these headings to the real areas of this repo — the modules, packages, or apps that
+own the change — and add any the list below misses. Delete buckets with no changes; never
+write an "N/A" row. Mark each artifact NEW / MODIFY / DELETE.]
 
-### Database — `<package>`
+### Database — `<owner>`
 
 | Artifact | Change | What & why |
 | --- | --- | --- |
 | `path` | NEW | |
 
-### Backend / API — `<package>`
+### Backend / API — `<owner>`
 
 | Artifact | Change | What & why |
 | --- | --- | --- |
 | `path` | MODIFY | |
 
-### Shared packages / contracts — `<package>`
+### Shared modules / contracts — `<owner>`
 
 | Artifact | Change | What & why |
 | --- | --- | --- |
 
-### Frontend — `<app>`
+### Frontend — `<owner>`
 
 | Artifact | Change | What & why |
 | --- | --- | --- |
 
-### Jobs / async — `<package>`
+### Jobs / async — `<owner>`
 
 | Artifact | Change | What & why |
 | --- | --- | --- |

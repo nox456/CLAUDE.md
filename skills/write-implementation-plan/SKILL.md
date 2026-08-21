@@ -46,10 +46,10 @@ prompt is a confident-looking list of files that do not exist.
 
 ### Step 1 — Frame
 
-Start from what already exists, never from the prompt alone: the issue and **its comments**
-(`gh issue view <n> --comments`), the PRD if there is one, design links, related ADRs, prior
-plans in the repo — their structure is the house style, match it — and `git log` on the
-surface being changed.
+Start from what already exists, never from the prompt alone: the ticket and **its comments**
+(`gh issue view <n> --comments` where the tracker is GitHub, otherwise ask for it), the PRD if
+there is one, design links, related ADRs, prior plans in the repo — their structure is the
+house style, match it — and the version-control history for the surface being changed.
 
 Size the work before writing. If it touches one or two files in a single package with no
 cross-layer effect, say so and offer a five-line plan instead of the full document. Ceremony
@@ -57,19 +57,23 @@ around a one-line fix is a cost, not a deliverable.
 
 ### Step 2 — Map the repo
 
-**The scope buckets are not a fixed list — derive them from this repo.** Read the workspace
-definition (`pnpm-workspace.yaml`, `package.json` workspaces, `Cargo.toml`, `go.work`, …) and
-list `packages/*` and `apps/*`, then decide which ones the work actually touches. Name
-buckets after the real directories, not after generic layers.
+**The scope buckets are not a fixed list — derive them from this repo.** Find how this
+codebase is actually partitioned: the build or dependency manifest at the root, whatever it
+declares as workspaces / modules / projects, and the top-level source directories. A monorepo
+buckets by package and app; a single-package repo buckets by its real modules (`parser`,
+`scheduler`, `cli`); a service repo may bucket by layer. Name buckets after directories that
+exist here — never after the generic layer names in the template.
 
 For each affected area, read the closest existing analogue — the router next to the one being
 added, the last migration, a sibling screen — and capture:
 
 - naming and layering conventions (what calls what, what is not allowed to call what)
-- generated artifacts (types, migrations, API clients, i18n bundles) and the command that
+- generated artifacts (types, migrations, API clients, locale bundles) and the command that
   regenerates them
-- the test layout and the command that runs it
-- anything in `CLAUDE.md` or contributor docs that constrains the change
+- the test layout, plus the build / test / lint commands the repo actually defines — read them
+  from the manifest, task runner, or CI config; never assume a package manager or a command name
+- anything in the repo's agent or contributor docs (`CLAUDE.md`, `AGENTS.md`,
+  `CONTRIBUTING.md`, ADRs) that constrains the change
 
 Read `references/scoping-changes.md` before writing the change list — it holds the per-layer
 buckets and the ripple changes plans most often miss (index for the new query path, env var
@@ -118,10 +122,12 @@ they are separated, a rewrite if they are woven into the prose.
 
 Where to save it, in priority order:
 
-1. Beside existing plans, matching their naming, if the repo already has some
-2. `ISSUE_<n>_IMPLEMENTATION_PLAN.md` at the repo root, when the work is tied to a GitHub issue
-3. `docs/plans/<YYYY-MM-DD>-<slug>.md` if a `docs/` directory exists, else
-   `<slug>-implementation-plan.md` at the root
+1. Beside existing plans, matching their naming exactly, if the repo already has some
+2. `docs/plans/<YYYY-MM-DD>-<slug>.md` if a `docs/` directory exists
+3. `<slug>-implementation-plan.md` at the repo root
+
+Where the repo has no convention of its own and the work has a ticket, put the ticket ID in
+the filename so the two stay findable together.
 
 ### Step 5 — Self-review (gate)
 

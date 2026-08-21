@@ -9,12 +9,13 @@ you cannot into an open question with an owner.
 - [ ] Every symbol, table, endpoint, and env var referenced is real or marked `NEW`
 - [ ] Naming matches the repo's conventions, not generic ones
 - [ ] Current behavior is described from the code, not assumed
-- [ ] Nothing conflicts with `CLAUDE.md` or the contributor docs
+- [ ] Nothing conflicts with the repo's agent or contributor docs (`CLAUDE.md`, `AGENTS.md`,
+      `CONTRIBUTING.md`, ADRs)
 - [ ] No invented library, service, or internal API
 
 ## Scoping
 
-- [ ] Buckets are named after real packages/apps in this repo
+- [ ] Buckets are named after real modules, packages, or directories in this repo
 - [ ] Every change sits in exactly one bucket — no "misc", no duplicated rows
 - [ ] No empty bucket and no "N/A" row survives
 - [ ] Every row is marked `NEW` / `MODIFY` / `DELETE` and says why in one line
@@ -48,7 +49,8 @@ you cannot into an open question with an owner.
 
 ## Verification & operations
 
-- [ ] Every level has a real command or a concrete observable check — no "run the tests"
+- [ ] Every level has a concrete observable check, or a command the repo actually defines —
+      never a guessed command, never "run the tests"
 - [ ] The failure paths, not only the happy path, are covered
 - [ ] Migration/backfill is specified with data volume and reversibility, or explicitly `none`
 - [ ] Rollback says what to revert, in what order, and what state users are left in
