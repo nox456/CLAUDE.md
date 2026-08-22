@@ -38,7 +38,7 @@ prompt is a confident-looking list of files that do not exist.
 - [ ] Step 1 — Frame: read the source of truth, size the work
 - [ ] Step 2 — Map: derive the real scope buckets and conventions from the repo
 - [ ] Step 3 — Decide: resolve the forks that change cost, risk, or behavior
-- [ ] Step 4 — Draft: fill the template in dependency order
+- [ ] Step 4 — Draft: agree the save path, then fill the template in dependency order
 - [ ] Step 5 — Self-review: run the quality gate, verify the paths
 - [ ] Step 6 — Hand off: report path, scope counts, blocking questions
 
@@ -120,14 +120,22 @@ Keep file lists, verification steps, and test inventories in their **own** secti
 QA-readable version of this plan is produced by deleting those sections wholesale — cheap if
 they are separated, a rewrite if they are woven into the prose.
 
-Where to save it, in priority order:
+**Ask the user where to save it** with `AskUserQuestion` before writing the file — never
+pick the path silently, and never write outside the path they choose. Fold the question into
+the last decision round from step 3 if a round is still available; otherwise ask it on its
+own here, once the slug is known.
+
+Propose concrete paths built from what the repo actually has, best candidate first and
+labelled as recommended:
 
 1. Beside existing plans, matching their naming exactly, if the repo already has some
 2. `docs/plans/<YYYY-MM-DD>-<slug>.md` if a `docs/` directory exists
 3. `<slug>-implementation-plan.md` at the repo root
 
-Where the repo has no convention of its own and the work has a ticket, put the ticket ID in
-the filename so the two stay findable together.
+Two or three concrete options is enough — the user can always type a path of their own. If
+the answer names a directory that does not exist yet, create it. Where the repo has no
+convention of its own and the work has a ticket, put the ticket ID in the proposed filenames
+so the plan and the ticket stay findable together.
 
 ### Step 5 — Self-review (gate)
 

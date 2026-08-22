@@ -34,7 +34,7 @@ template filled from a one-line prompt is a plausible-looking document full of g
 - [ ] Step 1 — Frame: pick the format, collect the inputs that already exist
 - [ ] Step 2 — Interview: close the gaps that change what gets built
 - [ ] Step 3 — Ground: check the claims against the codebase and existing docs
-- [ ] Step 4 — Draft: fill the template in dependency order
+- [ ] Step 4 — Draft: agree the save path, then fill the template in dependency order
 - [ ] Step 5 — Self-review: run the quality gate and fix what it catches
 - [ ] Step 6 — Hand off: report path, metric, and blocking open questions
 
@@ -105,10 +105,19 @@ problem → success metrics → scope and non-goals → requirements → accepta
 NFRs → risks. If you cannot state the metric, you cannot judge whether a requirement
 belongs — go back to step 2 instead of writing requirements anyway.
 
-Where to save it, in priority order:
+**Ask the user where to save it** with `AskUserQuestion` before writing the file — never
+pick the path silently, and never write outside the path they choose. Fold the question into
+the last interview round if a round is still available; otherwise ask it on its own here,
+once the slug is known.
+
+Propose concrete paths built from what the repo actually has, best candidate first and
+labelled as recommended:
 1. Beside existing PRDs, matching their naming, if the repo already has some
 2. `docs/prd/<YYYY-MM-DD>-<slug>.md` if a `docs/` directory exists
 3. `<slug>-prd.md` at the repo root
+
+Two or three concrete options is enough — the user can always type a path of their own. If
+the answer names a directory that does not exist yet, create it.
 
 Keep prose decisive and short. Link the prototype or design instead of describing it in
 paragraphs — where a high-fidelity design exists, it is the spec for look and interaction,
