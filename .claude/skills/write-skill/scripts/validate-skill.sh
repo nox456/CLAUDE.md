@@ -60,7 +60,8 @@ say() { # level, message
 err()  { errors=$((errors + 1)); say ERROR "$1"; }
 warn() { warns=$((warns + 1)); say WARN "$1"; }
 
-# Print "key<TAB>value" for each top-level frontmatter key, folding continuation lines.
+# Read a frontmatter body on stdin; print "key<TAB>value" for each top-level key,
+# folding continuation lines into the key above them.
 parse_frontmatter() {
   awk '
     /^[A-Za-z][A-Za-z0-9_-]*:/ {
@@ -78,7 +79,7 @@ parse_frontmatter() {
       next
     }
     END { for (i = 1; i <= n; i++) printf "%s\t%s\n", order[i], value[order[i]] }
-  ' "$1"
+  '
 }
 
 validate() {
@@ -157,15 +158,19 @@ validate() {
   # --- referenced paths resolve ---------------------------------------------
   local refs ref
   refs=$(grep -oE '(references|assets|scripts|evals)/[A-Za-z0-9._/-]+' "$md" | sed 's/[.,:;)]*$//' | sort -u)
-  for ref in $refs; do
+  while IFS= read -r ref; do
+    [ -n "$ref" ] || continue
+    # Stand-in names used when documenting path syntax, never real bundles.
+    case "$(basename "$ref")" in
+      foo.*|bar.*|baz.*|qux.*|example.*|placeholder.*) continue ;;
+    esac
     [ -e "$dir/$ref" ] && continue
     if [ -d "$dir/${ref%%/*}" ]; then
       err "SKILL.md references \"$ref\", which does not exist"
     else
       warn "SKILL.md mentions \"$ref\", which is not bundled (illustrative path?)"
     fi
-    continue
-  done
+  done <<< "$refs"
 
   # --- bundled files are reachable ------------------------------------------
   local f rel
