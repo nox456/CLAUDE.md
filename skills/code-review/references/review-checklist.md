@@ -51,4 +51,4 @@ not a caveat to mention.
 ## Conduct
 
 - [ ] No file was edited or created, no test suite or formatter run, nothing posted to GitHub.
-- [ ] Next steps (re-review, `simplify`, posting to the PR) are offered, not performed.
+- [ ] Next steps (re-review, `refactor-review`, posting to the PR) are offered, not performed.

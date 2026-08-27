@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Review code for functional defects — bugs, broken edge cases, unmet requirements — against the PRD or implementation plan it was built from, reporting each finding as severity (BLOCKING/HIGH/MEDIUM/LOW) + location + cause + a concrete fix, and closing with a merge-readiness score. Requires a PRD or implementation plan file and refuses to run without one. Report-only: applies no fixes, runs no tests, posts nothing. Use when asked to "review this code", "review my changes", "review this PR", "find bugs in what I just wrote", "is this ready to merge", "check the implementation against the plan", or when invoked as /code-review — including when the user asks for a review without naming a document. Does not cover refactor findings (duplication, naming, dead code, repo conventions) — that is the `simplify` skill's ground.
+description: Review code for functional defects — bugs, broken edge cases, unmet requirements — against the PRD or implementation plan it was built from, reporting each finding as severity (BLOCKING/HIGH/MEDIUM/LOW) + location + cause + a concrete fix, and closing with a merge-readiness score. Requires a PRD or implementation plan file and refuses to run without one. Report-only: applies no fixes, runs no tests, posts nothing. Use when asked to "review this code", "review my changes", "review this PR", "find bugs in what I just wrote", "is this ready to merge", "check the implementation against the plan", or when invoked as /code-review — including when the user asks for a review without naming a document. Does not cover refactor findings (duplication, naming, dead code, repo conventions) — that is the `refactor-review` skill's ground, and it runs after this one.
 ---
 
 # Review Code Against Its Spec
@@ -17,7 +17,7 @@ prevent — code that works perfectly and does the wrong thing.
   (step 1). If there is none, stop and ask for one. Do not review "just the diff".
 - **Functionality only.** A finding qualifies only if applying its fix **changes observable
   behavior**. Duplication, naming, dead code, file layout, missing abstractions, repo
-  conventions — all out of scope, all owned by the `simplify` skill. If you catch yourself
+  conventions — all out of scope, all owned by the `refactor-review` skill. If you catch yourself
   writing one, delete it rather than downgrading it to LOW.
 - **Report only.** Edit nothing, write no files, run no formatters, post nothing to GitHub.
   Findings live in the conversation. Do not run the test suite either — this is a reading
@@ -166,15 +166,15 @@ Any BLOCKING caps the score at 35. Floor at 0.
 
 Close with, in this order: the counts per severity, the arithmetic line, the score and its
 band, and the shortlist of findings that must be fixed before merge. Then stop — offer to
-re-review after fixes, run `simplify` for the refactor pass, or post the findings to the PR;
+re-review after fixes, run `refactor-review` for the refactor pass, or post the findings to the PR;
 do none of them unasked.
 
 ## Gotchas
 
 - **This skill installs as `/code-review` and shadows Claude Code's built-in `/code-review`.**
   Never invoke `/code-review` from inside a run — it resolves back here. The built-in's
-  reuse/simplification half is not lost: it lives in the `simplify` skill, which is the right
-  referral for anything this skill rules out of scope.
+  reuse/simplification half is not lost: it lives in the `refactor-review` skill, which is the
+  right referral for anything this skill rules out of scope.
 - Diff hunk headers (`@@ -12,7 +12,9 @@`) are not file line numbers after several hunks. Open
   the file at the reviewed ref and read the real line, or every Location in the review is off.
 - A hunk that is correct in isolation is the most common way a bug survives review: the caller
