@@ -113,6 +113,6 @@ coverage for this change is planned separately.]
 ## Out of scope
 
 - **New test coverage** — this plan does not specify tests to write. Planned separately with
-  the test skill. <!-- TODO: name the test-authoring skill here once it exists -->
+  the `write-tests` skill, once the implementation lands.
 - [Anything else a reader will assume this plan covers and it does not, with where it goes
   instead.]

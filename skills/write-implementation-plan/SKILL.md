@@ -33,8 +33,8 @@ prompt is a confident-looking list of files that do not exist.
   guess at a table name, a library, or an API shape.
 - **No test planning.** The plan never contains a tests bucket, a test file, or a list of cases
   to write. Verification proves a step works with what the repo already has — an existing suite,
-  a command, an observable check. Deciding what new coverage the change needs is a separate,
-  later skill. <!-- TODO: name the test-authoring skill here once it exists -->
+  a command, an observable check. Deciding what new coverage the change needs belongs to the
+  `write-tests` skill, run after the plan is implemented.
 - **Write no code and open no PRs.** This skill produces one Markdown document.
 
 ## Workflow
@@ -124,8 +124,7 @@ Keep file lists and verification steps in their **own** sections. The QA-readabl
 this plan is produced by deleting those sections wholesale — cheap if they are separated, a
 rewrite if they are woven into the prose.
 
-**Out of scope** always names test authoring, and points at the skill that will own it.
-<!-- TODO: name the test-authoring skill here once it exists -->
+**Out of scope** always names test authoring, and points at `write-tests`, which owns it.
 
 **Ask the user where to save it** with `AskUserQuestion` before writing the file — never
 pick the path silently, and never write outside the path they choose. Fold the question into

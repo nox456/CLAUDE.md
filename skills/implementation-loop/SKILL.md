@@ -24,9 +24,8 @@ and report.
   name go in the deviation log, not in the diff — even when they are obviously right. The only
   exception is a change without which the phase's verification cannot pass; do it and record it.
 - **Write no tests.** The loop lands production code and runs the suites the repo already has.
-  New test files, new cases, new fixtures-for-coverage are a separate skill's job, run after the
-  plan is implemented — leaving a phase untested is expected here, not a gap to fill.
-  <!-- TODO: name the test-authoring skill here once it exists -->
+  New test files, new cases, new fixtures-for-coverage are the `write-tests` skill's job, run
+  after the plan is implemented — leaving a phase untested is expected here, not a gap to fill.
 - **You suggest the commit; the user commits.** Never run `git add`, `git commit`, `git push`,
   or create branches unless the user explicitly asks in that turn.
 - **Never mark a phase done over red checks.** Done means the phase's own verification passed
@@ -172,7 +171,7 @@ and what remains before the branch is mergeable (anything the plan lists under r
 migration, or open questions).
 
 State plainly that the change ships without new test coverage and that writing it is the next
-step. <!-- TODO: name the test-authoring skill here once it exists -->
+step, with `write-tests`.
 
 Then stop. Writing the tests, opening the PR, writing the QA-readable plan, and running the
 closing review are good next steps — offer them, do not do them unasked.

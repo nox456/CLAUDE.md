@@ -66,8 +66,8 @@ module; alerting on the new failure mode.
 ## Tests — out of scope
 
 Do not create a tests bucket. Unit, integration, e2e, fixtures, mocks, and factories are **not**
-planned here: what new coverage the change needs is decided by the test skill after this plan
-exists. <!-- TODO: name the test-authoring skill here once it exists -->
+planned here: what new coverage the change needs is decided by the `write-tests` skill, after
+this plan is implemented.
 
 What still belongs in this plan: the commands the repo **already** defines, recorded in
 Verification so a step can be proved green, and a line under Out of scope pointing at the test
