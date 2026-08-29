@@ -13,6 +13,17 @@ skills/<name>/         ->  ~/.claude/skills/<name>
 install.sh                 creates/refreshes the symlinks
 ```
 
+## Skills
+
+| Name | Description | Depends on |
+| --- | --- | --- |
+| [write-prd](skills/write-prd/) | Interviews the requester and grounds the result in the codebase to produce a PRD with scope, numbered requirements and Given/When/Then acceptance criteria. | — |
+| [write-implementation-plan](skills/write-implementation-plan/) | Turns an issue or PRD into a technical plan: change list by layer, numbered requirements, ordered build sequence, rollback path. | `write-prd` (optional input) |
+| [implementation-loop](skills/implementation-loop/) | Executes an implementation plan one phase at a time — implement, verify, suggest a commit, mark the phase done. | `write-implementation-plan` |
+| [code-review](skills/code-review/) | Reviews changed code for functional defects against the document it was built from, with severities and a merge-readiness score. | `write-prd` or `write-implementation-plan` |
+| [refactor-review](skills/refactor-review/) | Reviews working code for behavior-preserving cleanups — duplication, misplaced helpers, convention drift, dead code — with a refactor score. | `write-implementation-plan`, `code-review` |
+| [english-coach](skills/english-coach/) | Appends a short English-coaching note to every response, rewriting the phrasings that read non-native. | — |
+
 ## Setup on a new machine
 
 ```bash
@@ -29,4 +40,5 @@ Set `CLAUDE_CONFIG_DIR` to link somewhere other than `~/.claude`.
 
 ## Adding a skill
 
-Create `skills/<name>/SKILL.md` here, then run `./install.sh` to link it.
+Create `skills/<name>/SKILL.md` here, add a row to the Skills table above, then run
+`./install.sh` to link it. The `/write-skill` skill walks the whole process.

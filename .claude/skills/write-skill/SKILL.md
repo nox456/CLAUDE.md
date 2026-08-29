@@ -40,7 +40,8 @@ from memory of the spec (invalid frontmatter, a bloated body, a description that
 - [ ] Step 4 — Write `SKILL.md` and its files
 - [ ] Step 5 — Write the description last
 - [ ] Step 6 — Validate and self-review
-- [ ] Step 7 — Install and hand off
+- [ ] Step 7 — Update the README skills table
+- [ ] Step 8 — Install and hand off
 
 ---
 
@@ -151,7 +152,24 @@ If the skill is high-stakes or being iterated on, run it once against a real tas
 context (a subagent is enough) and fix what the trace exposes: steps skipped, instructions
 ignored, time lost to vagueness.
 
-### Step 7 — Install and hand off
+### Step 7 — Update the README skills table
+
+Every git-tracked skill in `skills/` has a row in the **Skills** table in `README.md`. Two kinds
+are deliberately absent: skills in `.claude/skills/` (repo-only tooling, `write-skill` included),
+and gitignored skills in `skills/` (private, work-specific ones — check with
+`git check-ignore skills/<name>` before adding a row). For a new skill, add its row in the
+table's existing order — authoring, then execution, then review, then standalone skills:
+
+| Column | Value |
+| --- | --- |
+| Name | The skill name, linked to its directory: `[name](skills/name/)` |
+| Description | One sentence saying what the skill produces — not when it triggers |
+| Depends on | The skills whose output it consumes or that it delegates to, in backticks; `—` if none |
+
+For a revision, touch the row only when the name, the scope, or a dependency actually changed.
+Renaming a skill means fixing its link *and* every `Depends on` cell that names it.
+
+### Step 8 — Install and hand off
 
 Place the directory where this project's client looks for it. Detect, do not assume: in this
 repo general-use skills live in `skills/<name>/` and `./install.sh` symlinks them into
@@ -160,7 +178,8 @@ symlink), while skills meant only for this repo live in `.claude/skills/<name>/`
 check for `.claude/skills/`, `~/.claude/skills/`, or `.agents/skills/` and follow what is there.
 
 Report: the path, what the skill covers and deliberately excludes, the files bundled and when
-each loads, validator output, unresolved `WARN`s, and how to try it (`/<name>`, or a prompt that
+each loads, validator output, unresolved `WARN`s, the README row added or updated, and how to
+try it (`/<name>`, or a prompt that
 should trigger it). Offer a Conventional Commits message matching the repo's history — do not
 stage or commit.
 
