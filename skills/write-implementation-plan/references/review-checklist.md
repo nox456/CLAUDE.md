@@ -21,7 +21,10 @@ you cannot into an open question with an owner.
 - [ ] Every row is marked `NEW` / `MODIFY` / `DELETE` and says why in one line
 - [ ] The cross-cutting sweep in `scoping-changes.md` was run: consumers, generated code,
       existing data, deletions
-- [ ] Out of scope names what a reader would otherwise assume is included
+- [ ] No test file, test case, or tests bucket appears anywhere — coverage is the test skill's
+      job, not this plan's
+- [ ] Out of scope names what a reader would otherwise assume is included, and names test
+      authoring explicitly
 
 ## Technical requirements
 
@@ -49,8 +52,8 @@ you cannot into an open question with an owner.
 
 ## Verification & operations
 
-- [ ] Every level has a concrete observable check, or a command the repo actually defines —
-      never a guessed command, never "run the tests"
+- [ ] Every level has a concrete observable check, or a command the repo **already** defines —
+      never a guessed command, never a test still to be written, never "run the tests"
 - [ ] The failure paths, not only the happy path, are covered
 - [ ] Migration/backfill is specified with data volume and reversibility, or explicitly `none`
 - [ ] Rollback says what to revert, in what order, and what state users are left in
@@ -60,7 +63,7 @@ you cannot into an open question with an owner.
 ## Readability
 
 - [ ] An engineer who was not in the conversation can execute it without asking
-- [ ] File lists, verification, and test inventory are in their own sections, so the QA
-      version is a deletion and not a rewrite
+- [ ] File lists and verification are in their own sections, so the QA version is a deletion
+      and not a rewrite
 - [ ] No copied PRD prose; the PRD is linked
 - [ ] Status, author, issue/PRD link, and date are filled in

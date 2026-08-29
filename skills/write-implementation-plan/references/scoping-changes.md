@@ -14,7 +14,7 @@ row-level policies, ORM model definitions.
 **Often missed:** an index for every new query path and filter; nullability and default for a
 new column on a populated table; whether the migration is reversible; a backfill for existing
 rows and how long it runs; unique constraints that a concurrent writer can violate; seed and
-fixture data used by tests and local dev; read-replica vs. primary routing for the new query.
+fixture data used by local dev; read-replica vs. primary routing for the new query.
 
 ## Backend / API
 
@@ -63,13 +63,16 @@ deploy config; the flag's default per environment and the ticket to remove it la
 dependency's real cost (license, install size, build time); CI steps that must run for the new
 module; alerting on the new failure mode.
 
-## Tests
+## Tests — out of scope
 
-Unit, integration, e2e, fixtures, mocks, factories.
+Do not create a tests bucket. Unit, integration, e2e, fixtures, mocks, and factories are **not**
+planned here: what new coverage the change needs is decided by the test skill after this plan
+exists. <!-- TODO: name the test-authoring skill here once it exists -->
 
-**Often missed:** tests for the failure paths, not just the happy path; a regression test for
-the bug being fixed; fixtures updated alongside a schema change; the command for each level
-recorded in the Verification section.
+What still belongs in this plan: the commands the repo **already** defines, recorded in
+Verification so a step can be proved green, and a line under Out of scope pointing at the test
+skill. If a schema or contract change breaks existing fixtures, that fixture file is a MODIFY
+row in the bucket that owns it — repairing what exists is not authoring coverage.
 
 ## Docs
 

@@ -72,11 +72,6 @@ write an "N/A" row. Mark each artifact NEW / MODIFY / DELETE.]
 | Artifact | Change | What & why |
 | --- | --- | --- |
 
-### Tests
-
-| Artifact | Change | What & why |
-| --- | --- | --- |
-
 ## Build sequence
 
 [Ordered so each step is independently verifiable and leaves the branch deployable.
@@ -91,10 +86,13 @@ Contract-bearing steps first.]
 
 ## Verification
 
+[Only checks that can run against what exists once the build sequence is done — the repo's
+current suites, a command, an observable behavior. Do **not** list tests to be written; test
+coverage for this change is planned separately.]
+
 | Level | What it proves | How |
 | --- | --- | --- |
-| Unit | | `<command>` |
-| Integration | | `<command>` |
+| Existing automated checks | [that nothing already covered regressed] | `<command the repo defines>` |
 | Manual / QA | | [steps] |
 | Telemetry | | [log, metric, or event to watch after deploy] |
 
@@ -114,4 +112,7 @@ Contract-bearing steps first.]
 
 ## Out of scope
 
-[What a reader will assume this plan covers and it does not, with where it goes instead.]
+- **New test coverage** — this plan does not specify tests to write. Planned separately with
+  the test skill. <!-- TODO: name the test-authoring skill here once it exists -->
+- [Anything else a reader will assume this plan covers and it does not, with where it goes
+  instead.]

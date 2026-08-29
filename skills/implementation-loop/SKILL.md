@@ -1,6 +1,6 @@
 ---
 name: implementation-loop
-description: Execute an existing implementation plan one phase at a time — implement the phase, run the repo's own checks and the phase's verification, hand back a Conventional Commits message to copy, then mark the phase done in the plan file. Requires an implementation plan; refuses to run without one. Use when asked to "implement the plan", "work the plan", "run the implementation loop", "do the next phase", "continue the plan", or when invoked as /implementation-loop.
+description: Execute an existing implementation plan one phase at a time — implement the phase, run the repo's own checks and the phase's verification, hand back a Conventional Commits message to copy, then mark the phase done in the plan file. Requires an implementation plan; refuses to run without one. Use when asked to "implement the plan", "work the plan", "run the implementation loop", "do the next phase", "continue the plan", or when invoked as /implementation-loop. Writes production code only — it runs the repo's existing tests but never writes new ones, which is a separate test skill's job.
 ---
 
 # Implementation Loop
@@ -23,6 +23,10 @@ and report.
 - **Stay inside the phase.** Refactors, cleanups, and improvements the current phase does not
   name go in the deviation log, not in the diff — even when they are obviously right. The only
   exception is a change without which the phase's verification cannot pass; do it and record it.
+- **Write no tests.** The loop lands production code and runs the suites the repo already has.
+  New test files, new cases, new fixtures-for-coverage are a separate skill's job, run after the
+  plan is implemented — leaving a phase untested is expected here, not a gap to fill.
+  <!-- TODO: name the test-authoring skill here once it exists -->
 - **You suggest the commit; the user commits.** Never run `git add`, `git commit`, `git push`,
   or create branches unless the user explicitly asks in that turn.
 - **Never mark a phase done over red checks.** Done means the phase's own verification passed
@@ -75,8 +79,12 @@ Read the whole plan before touching any code, plus the repo's agent and contribu
 
 Work from the phase's own rows: the artifacts it names in the plan's scoped changes, the
 contracts it must honor, the requirements it satisfies. Before writing a file, read the closest
-existing analogue in that area and match its conventions — layering, naming, error handling,
-test layout. Reuse what the repo has instead of introducing a second way to do the same thing.
+existing analogue in that area and match its conventions — layering, naming, error handling.
+Reuse what the repo has instead of introducing a second way to do the same thing.
+
+Do not write tests, even when the phase's row mentions them or the code obviously wants them:
+note it and move on. If an existing test fails because the phase legitimately changed behavior,
+updating that test is a repair, not new coverage — do it and log it as a deviation.
 
 Leave nothing that a reviewer will have to ask about: no debug prints or `console.log`, no
 commented-out code, no comments restating what the line does, no scaffolding for a later phase.
@@ -87,8 +95,9 @@ In this order, stopping to fix what you broke:
 
 1. **The phase's own verification** — the check the plan wrote for this step. It is the
    definition of done for the phase.
-2. **The repo's checks** — format, lint, typecheck, tests, as the repo defines them, scoped to
-   the packages the diff touched, run one at a time.
+2. **The repo's checks** — format, lint, typecheck, and the repo's existing tests, as the repo
+   defines them, scoped to the packages the diff touched, run one at a time. A phase with no
+   test covering it is normal; do not add one to make the run feel complete.
 3. **A hygiene read of the diff** (`git diff`) for leftover debug output, stray TODOs,
    commented-out code, and noise comments.
 
@@ -162,5 +171,8 @@ commit messages suggested, every deviation from the original plan, checks curren
 and what remains before the branch is mergeable (anything the plan lists under rollout,
 migration, or open questions).
 
-Then stop. Opening the PR, writing the QA-readable plan, and running the closing review are
-good next steps — offer them, do not do them unasked.
+State plainly that the change ships without new test coverage and that writing it is the next
+step. <!-- TODO: name the test-authoring skill here once it exists -->
+
+Then stop. Writing the tests, opening the PR, writing the QA-readable plan, and running the
+closing review are good next steps — offer them, do not do them unasked.

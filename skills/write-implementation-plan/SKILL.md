@@ -1,6 +1,6 @@
 ---
 name: write-implementation-plan
-description: Write a technical implementation plan — ground the design in the real repo, then produce a plan with a change list scoped by layer (database, backend, shared packages, frontend, jobs, infra, tests), numbered technical requirements, the contracts other work depends on, an ordered build sequence with verification, and a rollback path. Use when asked to "write an implementation plan", "plan this issue", "plan the implementation", "how should we build this", "write a technical design", or when invoked as /write-implementation-plan.
+description: Write a technical implementation plan — ground the design in the real repo, then produce a plan with a change list scoped by layer (database, backend, shared packages, frontend, jobs, infra), numbered technical requirements, the contracts other work depends on, an ordered build sequence with verification, and a rollback path. Use when asked to "write an implementation plan", "plan this issue", "plan the implementation", "how should we build this", "write a technical design", or when invoked as /write-implementation-plan. Does not plan or specify tests — test coverage is left to a separate test skill.
 ---
 
 # Write an Implementation Plan
@@ -31,6 +31,10 @@ prompt is a confident-looking list of files that do not exist.
   Design decisions.
 - **Unknowns stay unknown.** `[TBD — @owner]` or an open question — never a plausible-looking
   guess at a table name, a library, or an API shape.
+- **No test planning.** The plan never contains a tests bucket, a test file, or a list of cases
+  to write. Verification proves a step works with what the repo already has — an existing suite,
+  a command, an observable check. Deciding what new coverage the change needs is a separate,
+  later skill. <!-- TODO: name the test-authoring skill here once it exists -->
 - **Write no code and open no PRs.** This skill produces one Markdown document.
 
 ## Workflow
@@ -70,8 +74,8 @@ added, the last migration, a sibling screen — and capture:
 - naming and layering conventions (what calls what, what is not allowed to call what)
 - generated artifacts (types, migrations, API clients, locale bundles) and the command that
   regenerates them
-- the test layout, plus the build / test / lint commands the repo actually defines — read them
-  from the manifest, task runner, or CI config; never assume a package manager or a command name
+- the build / test / lint commands the repo actually defines — read them from the manifest,
+  task runner, or CI config; never assume a package manager or a command name
 - anything in the repo's agent or contributor docs (`CLAUDE.md`, `AGENTS.md`,
   `CONTRIBUTING.md`, ADRs) that constrains the change
 
@@ -116,9 +120,12 @@ Two sections carry the weight:
   Contract-bearing steps (migration, shared types, API schema) come before their consumers, so
   work can be parallelized after them.
 
-Keep file lists, verification steps, and test inventories in their **own** sections. The
-QA-readable version of this plan is produced by deleting those sections wholesale — cheap if
-they are separated, a rewrite if they are woven into the prose.
+Keep file lists and verification steps in their **own** sections. The QA-readable version of
+this plan is produced by deleting those sections wholesale — cheap if they are separated, a
+rewrite if they are woven into the prose.
+
+**Out of scope** always names test authoring, and points at the skill that will own it.
+<!-- TODO: name the test-authoring skill here once it exists -->
 
 **Ask the user where to save it** with `AskUserQuestion` before writing the file — never
 pick the path silently, and never write outside the path they choose. Fold the question into
@@ -153,7 +160,7 @@ Repeat until the checklist passes.
 Report, compactly:
 
 - the file path, and the issue or PRD it implements
-- the change count per scope bucket (e.g. `db 2 · api 5 · webui 3 · tests 4`)
+- the change count per scope bucket (e.g. `db 2 · api 5 · webui 3 · jobs 1`)
 - the number of build steps and what step 1 is
 - the decisions you made on the user's behalf that they may want to overturn
 - the open questions that **block starting**, ranked, each with an owner

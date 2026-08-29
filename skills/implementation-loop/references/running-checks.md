@@ -50,8 +50,9 @@ Prefer check-only variants for the report (`format:check`, `lint`) and fix varia
 - **Some tests need a service** (database, queue, container). If it is not running, report the
   specific check as not-run with the reason — never report it as passing, and never report it as
   a failure of the phase.
-- **Long test suites**: run the phase's own targeted tests first for the fast signal, then the
-  package suite.
+- **Long test suites**: run the existing tests covering the surface the phase touched first for
+  the fast signal, then the package suite. If nothing covers it, say so — that is a finding for
+  the test skill, not a reason to write a test here.
 
 ## Reporting results
 
