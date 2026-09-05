@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Review code for functional defects — bugs, broken edge cases, unmet requirements — against the PRD or implementation plan it was built from, reporting each finding as severity (BLOCKING/HIGH/MEDIUM/LOW) + location + cause + a concrete fix, and closing with a merge-readiness score. Requires a PRD or implementation plan file and refuses to run without one. Report-only: applies no fixes, runs no tests, posts nothing. Use when asked to "review this code", "review my changes", "review this PR", "find bugs in what I just wrote", "is this ready to merge", "check the implementation against the plan", or when invoked as /code-review — including when the user asks for a review without naming a document. Does not cover refactor findings (duplication, naming, dead code, repo conventions) — that is the `refactor-review` skill's ground, and it runs after this one.
+description: Review code for functional defects — bugs, broken edge cases, unmet requirements — against the PRD or implementation plan it was built from, reporting each finding as severity (BLOCKING/HIGH/MEDIUM/LOW) + location + cause + a concrete fix, and closing with a merge-readiness score. Requires a PRD or implementation plan file and refuses to run without one. Report-only: applies no fixes, runs no tests, posts nothing. Use when asked to "review this code", "review my changes", "review this PR", "find bugs in what I just wrote", "is this ready to merge", "check the implementation against the plan", or when invoked as /code-review — including when the user asks for a review without naming a document. Does not cover refactor findings (duplication, naming, dead code, repo conventions) — that is the `refactor-review` skill's ground, and it runs after this one. Findings stay in the conversation: publishing them as inline comments on a GitHub PR is `pr-review`'s ground, and it calls this skill for the analysis.
 ---
 
 # Review Code Against Its Spec
@@ -166,8 +166,8 @@ Any BLOCKING caps the score at 35. Floor at 0.
 
 Close with, in this order: the counts per severity, the arithmetic line, the score and its
 band, and the shortlist of findings that must be fixed before merge. Then stop — offer to
-re-review after fixes, run `refactor-review` for the refactor pass, or post the findings to the PR;
-do none of them unasked.
+re-review after fixes, run `refactor-review` for the refactor pass, or hand these findings to
+`pr-review` to publish them on the PR as inline comments; do none of them unasked.
 
 ## Gotchas
 
