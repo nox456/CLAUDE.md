@@ -25,6 +25,7 @@ install.sh                 creates/refreshes the symlinks
 | [code-review](skills/code-review/) | Reviews changed code for functional defects against the document it was built from, with severities and a merge-readiness score. | `write-prd` or `write-implementation-plan` |
 | [refactor-review](skills/refactor-review/) | Reviews working code for behavior-preserving cleanups — duplication, misplaced helpers, convention drift, dead code — with a refactor score. | `write-implementation-plan`, `code-review` |
 | [pr-review](skills/pr-review/) | Publishes a code review to a GitHub pull request — inline comments on the findings you pick plus one summary comment carrying the finding list and the merge-readiness score. | `code-review` |
+| [fix-pr-review](skills/fix-pr-review/) | Triages the review comments on a pull request against the code and the plan, fixes the ones you pick one at a time, and replies to every comment — fixed and skipped alike. | `write-implementation-plan` or `write-prd` |
 | [english-coach](skills/english-coach/) | Appends a short English-coaching note to every response, rewriting the phrasings that read non-native. | — |
 
 ## Setup on a new machine
