@@ -1,6 +1,6 @@
 ---
 name: write-prd
-description: Write a Product Requirements Document — interview the requester, ground the requirements in the real codebase, then produce a PRD with problem, success metrics, scope and non-goals, numbered functional requirements, Given/When/Then acceptance criteria, non-functional requirements, risks and open questions. Use when asked to "write a PRD", "create a product requirements document", "spec this feature", "turn this idea into requirements", "write a product spec", or when invoked as /write-prd.
+description: Write a Product Requirements Document — interview the requester, ground the requirements in the real codebase, then produce a PRD with problem, success metrics, scope and non-goals, numbered functional requirements, Given/When/Then acceptance criteria, non-functional requirements, risks and open questions, then review the draft with the requester and apply their changes before handing it off. Use when asked to "write a PRD", "create a product requirements document", "spec this feature", "turn this idea into requirements", "write a product spec", or when invoked as /write-prd.
 ---
 
 # Create a PRD
@@ -36,7 +36,8 @@ template filled from a one-line prompt is a plausible-looking document full of g
 - [ ] Step 3 — Ground: check the claims against the codebase and existing docs
 - [ ] Step 4 — Draft: agree the save path, then fill the template in dependency order
 - [ ] Step 5 — Self-review: run the quality gate and fix what it catches
-- [ ] Step 6 — Hand off: report path, metric, and blocking open questions
+- [ ] Step 6 — Review with the user: present the draft, apply their changes, get a yes
+- [ ] Step 7 — Hand off: report path, metric, and blocking open questions
 
 ---
 
@@ -131,13 +132,61 @@ owner and a needed-by date. Repeat until the checklist passes.
 
 **Do not present a PRD that has not been through this pass.**
 
-### Step 6 — Hand off
+### Step 6 — Review with the user (gate)
 
-Report, compactly:
+Step 5 checks the document against the rules; this step checks it against the requester's
+intent. Only they can catch a requirement that is clean, testable, and describes the wrong
+product.
+
+Post the save path and a section map. **Never paste the PRD into the conversation** — the file
+is the artifact, the map is the index into it:
+
+```
+Saved: docs/prd/2026-09-16-bulk-export.md
+
+| Section | What it says now |
+| --- | --- |
+| Problem | Admins export one row at a time |
+| Metric | Weekly export use 12% → 40%, 30 days |
+| Scope | 6 FR (4 Must, 2 Should), 3 non-goals |
+| Acceptance | 9 criteria, every Must covered |
+| Open | Retention window `[TBD — @legal]` |
+
+Decided for you: "bulk delete" made a non-goal; FR-5 (audit log) set to Should.
+
+Anything to change before I hand off?
+```
+
+One row per section the chosen template has. State what the section **says**, not that it is
+filled in — `Metric | 12% → 40%`, never `Metric | done`. Then list separately every place you
+decided for the user: a non-goal you inferred, a priority you assigned, a requirement written
+from a guess. That list is where the correction usually is.
+
+Ask for the changes as an open prompt, not with `AskUserQuestion` — the feedback is prose, not
+a choice between options.
+
+For each change they ask for:
+
+- **Cascade it.** The sections are dependent. A changed metric can orphan requirements; a new
+  requirement needs an acceptance criterion and maybe an NFR; moving something to non-goals
+  means deleting its requirements, not leaving them behind.
+- **Re-run the affected parts of `references/review-checklist.md`.** An edit breaks gates that
+  already passed — that is the common failure of a review round, not the edit being wrong.
+- **Push back once when a change breaks a ground rule** — an unsourced number, implementation
+  detail inside a requirement, a banned adjective. Name the rule, show the compliant version,
+  and stop there. If they reaffirm, apply it exactly as asked and mark it as theirs
+  (`[assumption — @user]` on an unsourced value). Push back once, never twice.
+
+Re-present the map with a list of what changed, and repeat. **There is no round limit and no
+hand-off without an explicit yes** — "looks good" is approval, silence is not.
+
+### Step 7 — Hand off
+
+Report, compactly — do not repeat the step 6 map, it is already in the conversation:
 
 - the file path and which format you used
-- the problem statement in one line, and the success metric with baseline → target
-- how many functional requirements, and which sections are still `[TBD]`
+- what changed across the review rounds, in one line
+- anything applied over a ground-rule objection, marked as the user's call
 - the open questions that **block starting the build**, ranked, each with its owner
 
 Then stop. Splitting the PRD into tickets, or generating test cases from the acceptance

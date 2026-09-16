@@ -17,7 +17,7 @@ install.sh                 creates/refreshes the symlinks
 
 | Name | Description | Depends on |
 | --- | --- | --- |
-| [write-prd](skills/write-prd/) | Interviews the requester and grounds the result in the codebase to produce a PRD with scope, numbered requirements and Given/When/Then acceptance criteria. | — |
+| [write-prd](skills/write-prd/) | Interviews the requester and grounds the result in the codebase to produce a PRD with scope, numbered requirements and Given/When/Then acceptance criteria, reviewed with you before hand-off. | — |
 | [write-implementation-plan](skills/write-implementation-plan/) | Turns an issue or PRD into a technical plan: change list by layer, numbered requirements, ordered build sequence, rollback path. | `write-prd` (optional input) |
 | [implementation-loop](skills/implementation-loop/) | Executes an implementation plan one phase at a time — implement, verify, suggest a commit, mark the phase done. | `write-implementation-plan` |
 | [write-tests](skills/write-tests/) | Audits the existing coverage behavior by behavior, writes the missing unit tests (happy path, edge cases, error path) plus optional flow-based integration tests, and records the result in the plan. | `write-implementation-plan`, `implementation-loop` |
