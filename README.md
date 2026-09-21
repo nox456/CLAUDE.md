@@ -15,6 +15,8 @@ install.sh                 creates/refreshes the symlinks
 
 ## Skills
 
+### Authored here
+
 | Name | Description | Depends on |
 | --- | --- | --- |
 | [write-prd](skills/write-prd/) | Interviews the requester and grounds the result in the codebase to produce a PRD with scope, numbered requirements and Given/When/Then acceptance criteria, reviewed with you before hand-off. | — |
@@ -27,6 +29,16 @@ install.sh                 creates/refreshes the symlinks
 | [pr-review](skills/pr-review/) | Publishes a code review to a GitHub pull request — inline comments on the findings you pick plus one summary comment carrying the finding list and the merge-readiness score. | `code-review` |
 | [fix-pr-review](skills/fix-pr-review/) | Triages the review comments on a pull request against the code and the plan, fixes the ones you pick one at a time, and replies to every comment — fixed and skipped alike. | `write-implementation-plan` or `write-prd` |
 | [english-coach](skills/english-coach/) | Appends a short English-coaching note to every response, rewriting the phrasings that read non-native. | — |
+
+### External
+
+Skills authored elsewhere and vendored in. `install.sh` links them like any other
+skill, but they are not ours to maintain: fixes belong upstream, and edits here are
+a deliberate local fork that the next update will have to be reconciled against.
+
+| Name | Description | Origin |
+| --- | --- | --- |
+| [using-git-worktrees](skills/using-git-worktrees/) | Ensures feature work starts in an isolated workspace — detects existing isolation, prefers the harness's native worktree tool, falls back to `git worktree add`, then runs project setup and a baseline test. Pairs with `write-implementation-plan` / `implementation-loop`, which it is meant to run before. | Third-party, installed into `~/.agents/skills/`; upstream not recorded in `.skill-lock.json` |
 
 ## Setup on a new machine
 
@@ -46,3 +58,6 @@ Set `CLAUDE_CONFIG_DIR` to link somewhere other than `~/.claude`.
 
 Create `skills/<name>/SKILL.md` here, add a row to the Skills table above, then run
 `./install.sh` to link it. The `/write-skill` skill walks the whole process.
+
+For a skill written by someone else, copy its folder into `skills/` and add the row
+to the External table instead, recording where it came from.
