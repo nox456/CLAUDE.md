@@ -19,6 +19,7 @@ install.sh                 creates/refreshes the symlinks
 
 | Name | Description | Depends on |
 | --- | --- | --- |
+| [start-issue](skills/start-issue/) | Sets up a dedicated session for one issue — checks your existing branch, creates its worktree, moves in, and starts the PRD. | `using-git-worktrees`, `write-prd` |
 | [write-prd](skills/write-prd/) | Interviews the requester and grounds the result in the codebase to produce a PRD with scope, numbered requirements and Given/When/Then acceptance criteria, reviewed with you before hand-off. | — |
 | [write-implementation-plan](skills/write-implementation-plan/) | Turns an issue or PRD into a technical plan: change list by layer, numbered requirements, ordered build sequence, rollback path. | `write-prd` (optional input) |
 | [implementation-loop](skills/implementation-loop/) | Executes an implementation plan one phase at a time — implement, verify, suggest a commit, mark the phase done. | `write-implementation-plan` |
