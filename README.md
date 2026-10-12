@@ -31,6 +31,7 @@ install.sh                 creates/refreshes the symlinks
 | [fix-pr-review](skills/fix-pr-review/) | Triages the review comments on a pull request against the code and the plan, fixes the ones you pick one at a time, and replies to every comment — fixed and skipped alike. | `write-implementation-plan` or `write-prd` |
 | [fix-review-findings](skills/fix-review-findings/) | Fixes the `code-review` / `refactor-review` findings you pick one at a time — verify, suggest a Conventional Commits title, and wait for your commit before starting the next. | `code-review`, `refactor-review` |
 | [fix-merge-conflicts](skills/fix-merge-conflicts/) | Resolves the conflicts of a stopped rebase and stages them — one line per file on how each was fixed, anything ambiguous left unmerged for you, and `git rebase --continue` left to you. | — |
+| [worktree-temp-task](skills/worktree-temp-task/) | Lends a worktree's branch and its uncommitted files to the main checkout for a task that only runs there, then puts the branch, the files and the main checkout's previous branch back — never deleting the worktree. | — |
 | [english-coach](skills/english-coach/) | Appends a short English-coaching note to every response, rewriting the phrasings that read non-native. | — |
 
 ### External
