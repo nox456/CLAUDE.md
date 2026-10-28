@@ -26,7 +26,25 @@ link() {
   echo "linked  $dest -> $src"
 }
 
-mkdir -p "$CLAUDE_DIR/skills"
+# Drop symlinks in ~/.claude/<dir> that still point into this repo's <dir> but whose source is
+# gone (i.e. deleted from the repo). Other symlinks are left alone.
+prune() {
+  local dir="$1" dest target
+  for dest in "$CLAUDE_DIR/$dir"/*; do
+    [ -L "$dest" ] || continue
+    target="$(readlink "$dest")"
+    case "$target" in
+      "$REPO/$dir"/*)
+        if [ ! -e "$target" ]; then
+          echo "prune   $dest (source removed from repo)"
+          rm "$dest"
+        fi
+        ;;
+    esac
+  done
+}
+
+mkdir -p "$CLAUDE_DIR/skills" "$CLAUDE_DIR/agents" "$CLAUDE_DIR/hooks"
 
 link "$REPO/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md"
 
@@ -35,17 +53,16 @@ for skill in "$REPO"/skills/*/; do
   link "${skill%/}" "$CLAUDE_DIR/skills/$(basename "$skill")"
 done
 
-# Drop symlinks that still point into this repo but whose source is gone
-# (i.e. skills deleted from the repo). Other symlinks are left alone.
-for dest in "$CLAUDE_DIR"/skills/*; do
-  [ -L "$dest" ] || continue
-  target="$(readlink "$dest")"
-  case "$target" in
-    "$REPO"/skills/*)
-      if [ ! -e "$target" ]; then
-        echo "prune   $dest (source removed from repo)"
-        rm "$dest"
-      fi
-      ;;
-  esac
+for agent in "$REPO"/agents/*.md; do
+  [ -f "$agent" ] || continue
+  link "$agent" "$CLAUDE_DIR/agents/$(basename "$agent")"
 done
+
+for hook in "$REPO"/hooks/*; do
+  [ -f "$hook" ] || continue
+  link "$hook" "$CLAUDE_DIR/hooks/$(basename "$hook")"
+done
+
+prune skills
+prune agents
+prune hooks
