@@ -1,6 +1,6 @@
 ---
 name: start-issue
-description: Set up this Claude session to work one issue in its own git worktree — confirm the issue (GitHub or Linear), check the user's existing branch, create the worktree on it through the `using-git-worktrees` skill, move in, then run `write-prd` on the issue. Use when the user wants to start an issue in a worktree, work several issues in parallel, or says "start issue 42", "start LIN-123 on feat/x", "set up a worktree for this issue", "new worktree for my branch", "spin up a workspace for this ticket", or invokes /start-issue. Requires a branch the user already created (never main/master) and a session dedicated to that one issue. Never creates a branch. Stops after the PRD; `write-implementation-plan` and `implementation-loop` run afterwards.
+description: Set up this Claude session to work one issue in its own git worktree — confirm the issue (GitHub or Linear), check the user's existing branch, create the worktree on it through the `using-git-worktrees` skill, move in, then run `write-prd` on the issue. Use when the user wants to start an issue in a worktree, work several issues in parallel, or says "start issue 42", "start LIN-123 on feat/x", "set up a worktree for this issue", "new worktree for my branch", "spin up a workspace for this ticket", or invokes /start-issue. Requires a branch the user already created (never main/master) and a session dedicated to that one issue. Never creates a branch. Stops after the PRD and leaves a hand-off record that `/work-issue` requires to continue the issue.
 ---
 
 # Start an issue in its own worktree
@@ -106,14 +106,34 @@ Worktree:  <absolute path>
 Baseline:  <tests passing | failures, as reported by using-git-worktrees>
 ```
 
+Then, from inside the worktree, write the hand-off record. `/work-issue` refuses to run
+without it. It goes in the worktree's private git directory, so it is never committed and is
+removed along with the worktree:
+
+```bash
+jq -n --arg issue "<ID>" --arg tracker "<github|linear>" --arg title "<title>" --arg url "<url>" \
+  --arg branch "<BRANCH>" --arg worktree "$(git rev-parse --show-toplevel)" --arg created "$(date +%F)" \
+  '{issue: $issue, tracker: $tracker, title: $title, url: $url, branch: $branch,
+    worktree: $worktree, prd: null, plan: null, created: $created}' \
+  > "$(git rev-parse --absolute-git-dir)/start-issue.json"
+```
+
 ### Step 6 — Write the PRD
 
 Still inside the worktree, invoke the `write-prd` skill with the Skill tool on the issue from
 Step 2. Pass the issue ID, title and URL in `args` so it does not ask for them again. Follow
 that skill to the end, including its review with the user.
 
-Stop after `write-prd` hands off. Do not start the implementation plan or any code until the
-user asks.
+When `write-prd` hands off, store the PRD's absolute path in the record:
+
+```bash
+f="$(git rev-parse --absolute-git-dir)/start-issue.json"
+jq --arg prd "<absolute PRD path>" '.prd = $prd' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+```
+
+Then stop, and offer `/work-issue` as the next step. It continues from this record, in this
+session or a later one opened in the worktree. Do not start it, the implementation plan or any
+code until the user asks.
 
 ## Gotchas
 
