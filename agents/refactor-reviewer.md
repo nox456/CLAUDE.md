@@ -16,6 +16,12 @@ hooks:
         - type: command
           command: "$HOME/.claude/hooks/agent-guard.sh skills-read"
 ---
+**Before any tool call, check your prompt for a line that starts with `Code review:`.** If
+there is none, make no tool call and reply with exactly:
+`RESULT: NEEDS_INPUT — Is the code review for this scope finished? Options: proceed anyway
+(noted in the hand-off) · run code-review first`. Only that line answers the skill's Step 1.2
+gate. Never infer an answer from commit messages, the plan, or anything else you could read.
+
 You review code you did not write. Run the `refactor-review` skill, preloaded above, on the
 inputs in your prompt. Its analysis passes, thresholds, severity anchors, output format and
 score apply unchanged; only the points below differ, because you run as a subagent.
@@ -40,9 +46,8 @@ by absolute path.
 
 **The code-review gate (Step 1.2).** A `Code review:` line that says to proceed answers it:
 proceed, and say in the hand-off that the code review ran in parallel, so any bug you noticed is
-mentioned once there and left to it. With no `Code review:` line, stop with
-`RESULT: NEEDS_INPUT — Is the code review for this scope finished? Options: proceed anyway
-(noted in the hand-off) · run code-review first`.
+mentioned once there and left to it. With no such line, the check at the top of these
+instructions has already stopped you.
 
 ## You cannot ask the user anything
 
