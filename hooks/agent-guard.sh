@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # PreToolUse guard for the subagents in agents/: turns their "report only", "never commit" and
-# "never touch that kind of file" rules from instructions into denials.
+# "never touch that kind of file" rules from instructions into denials, and lets them read the
+# skill they wrap without a permission prompt.
 set -uo pipefail
 
 usage() {
@@ -20,6 +21,10 @@ Modes:
               Used by tester.
   src-only    Edit/Write never on a test file, fixture, factory or config. Used by
               mutation-tester.
+  skills-read Read on a file under ${CLAUDE_CONFIG_DIR:-~/.claude}/skills/ is allowed without a
+              permission prompt: prints a PreToolUse "allow" decision on stdout. Any other
+              call goes through Claude Code's normal permission flow. Used by every agent,
+              since a preloaded skill's references/ sit outside the repo under review.
 
 A mode lets through the tools it does not guard. Anything the guard cannot read is denied:
 a guard that fails open guards nothing. Exit 1 is never used, because Claude Code treats it
@@ -112,7 +117,7 @@ check_readonly_segment() {
       deny "\"git ${words[i]:-}\" is not on the read-only allowlist ($READONLY_ALLOWLIST)."
       ;;
   esac
-  deny "\"${words[0]}\" is not on the read-only allowlist ($READONLY_ALLOWLIST). Use the Read, Grep and Glob tools for anything else."
+  deny "\"${words[0]}\" is not on the read-only allowlist ($READONLY_ALLOWLIST). Read files with the Read tool, search with rg, and list files with rg --files."
 }
 
 guard_readonly() {
@@ -212,11 +217,24 @@ guard_file() {
   esac
 }
 
+# Print an "allow" decision when FILE sits under the skills directory. A path with a . or ..
+# component gets no decision, so ~/.claude/skills/../settings.json cannot borrow the grant.
+grant_skills_read() {
+  local file="$1" skills="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills/"
+  case "$file" in "~/"*) file="$HOME/${file#"~/"}" ;; esac
+  case "/$file/" in */../* | */./*) return 0 ;; esac
+  case "$file" in
+    "$skills"?*)
+      jq -nc '{hookSpecificOutput: {hookEventName: "PreToolUse", permissionDecision: "allow",
+        permissionDecisionReason: "agent-guard skills-read: an agent reading the skill it wraps"}}' ;;
+  esac
+}
+
 case "$MODE" in
   -h | --help) usage; exit 0 ;;
-  readonly | no-git | tests-only | src-only) ;;
+  readonly | no-git | tests-only | src-only | skills-read) ;;
   "") usage >&2; deny "no mode given." ;;
-  *) deny "unknown mode \"$MODE\". Expected readonly, no-git, tests-only or src-only." ;;
+  *) deny "unknown mode \"$MODE\". Expected readonly, no-git, tests-only, src-only or skills-read." ;;
 esac
 
 command -v jq >/dev/null 2>&1 || deny "jq is not installed, so the hook input cannot be read. Every call is denied until it is."
@@ -234,6 +252,10 @@ case "$MODE" in
     case "$TOOL" in Edit | Write | MultiEdit | NotebookEdit) ;; *) exit 0 ;; esac
     guard_file "$(jq -r '.tool_input.file_path // .tool_input.notebook_path // ""' <<<"$INPUT")" \
       "$(jq -r '.cwd // ""' <<<"$INPUT")"
+    ;;
+  skills-read)
+    [ "$TOOL" = Read ] || exit 0
+    grant_skills_read "$(jq -r '.tool_input.file_path // ""' <<<"$INPUT")"
     ;;
 esac
 exit 0
